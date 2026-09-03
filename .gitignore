@@ -1,0 +1,16 @@
+﻿# data and heavy outputs
+data/
+results/raw/*.csv
+results/raw/*.npy
+
+# python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.ipynb_checkpoints/
