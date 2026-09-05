@@ -1,0 +1,38 @@
+# RectifyCLIP default configuration
+#
+# Central place for model, prompt, and path settings so scripts under src/ take
+# these as config rather than hardcoding them (CLAUDE.md coding convention).
+# Day 1's src/clip_zero_shot.py hardcoded these values for its single-image CLI
+# check; from Day 2 onward, batch inference reads this file instead.
+
+model_name: ViT-B-32
+pretrained_weights: laion2b_s34b_b79k
+
+# Exact spelling matches the MonuMAI folder names on disk (src/data_loader.py's
+# STYLE_FOLDERS) — CLIP is prompt-sensitive, so this spelling is fixed, not a
+# free choice. Order also matches STYLE_FOLDERS/data_loader.py.
+class_names:
+  - Hispanic-Muslim
+  - Gothic
+  - Renaissance
+  - Baroque
+
+# Default prompt template used for the Day 2 clean baseline. This is a
+# reasonable, untuned choice, not a selected winner — Day 2 also pilots
+# "{}" and "a facade in {} architectural style" without picking between them;
+# Day 6 runs the real prompt-sensitivity ablation.
+prompt_template: "a photo of {} architecture"
+
+# CLIP's own open_clip preprocessing transform already resizes/crops to this
+# resolution for ViT-B/32; recorded here for documentation/reproducibility
+# only, not applied as a second, separate resize (Day 2's "do not touch
+# preprocessing beyond CLIP's own defaults" rule).
+image_size: 224
+
+# Global project seed. Not used by anything in Day 2 — batch inference here is
+# a plain deterministic pass over every image with no randomness (no sampling,
+# no shuffling). Reserved for Day 3+, where distort(image, severity, seed) and
+# any subsampling need a fixed seed.
+seed: 42
+
+dataset_root: data/monumai

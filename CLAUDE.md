@@ -25,8 +25,14 @@ file describes how to work, that file describes what to build and when.
 - OpenCV (`opencv-python`) for perspective distortion and rectification (homography-based)
 - pandas / numpy for results tables, matplotlib for figures, scikit-learn for metrics,
   pyyaml for configs
-- Dataset: MonuMAI, 1,092 images, 4 architectural styles (Hispanic-Muslim, Gothic,
-  Renaissance, Baroque), stored in `data/monumai/` (gitignored — never commit images)
+- Dataset: MonuMAI, 1,514 images, 4 architectural styles (Hispanic-Muslim, Gothic,
+  Renaissance, Baroque), stored in `data/monumai/` (gitignored — never commit images).
+  1,514 is the official release's full image count, confirmed against the source
+  repo's own README (see `experiments/logs/day1.md`) — an earlier "1,092" figure here
+  was stale, apparently from a different paper's filtered subset, not an official
+  MonuMAI train/test split; since this project runs CLIP zero-shot with no
+  fine-tuning, there is no split to honor and all 1,514 images are used as the
+  evaluation set.
 - Platform: Windows + VS Code + PowerShell locally; Colab T4 as fallback only if CPU is too slow
 
 ## Repository structure
