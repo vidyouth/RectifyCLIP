@@ -8,6 +8,7 @@ implemented here yet — adding them now would be building ahead of the day that
 needs them.
 """
 
+from scipy.stats import binomtest
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 
@@ -54,3 +55,47 @@ def confusion_matrix_counts(rows, class_names):
     predicted_labels = [row["predicted_label"] for row in rows]
     matrix = sk_confusion_matrix(true_labels, predicted_labels, labels=class_names)
     return matrix.tolist()
+
+
+def paired_mcnemar(rows_a, rows_b, key_field="image_id"):
+    """McNemar's exact test for two conditions evaluated on the same images.
+
+    Added on Day 5 to properly characterize the headline table's
+    "clean >= rectified >= distorted" sanity check: a small numeric gap
+    between two conditions' accuracy (e.g. rectified slightly below
+    distorted) can be ordinary sampling noise rather than a real effect, and
+    a raw accuracy comparison can't tell the two apart on its own. This test
+    can, because it uses the fact that both conditions were evaluated on the
+    *same* images (a paired design), by looking only at the discordant pairs
+    — images where the two conditions disagree on correctness.
+
+    rows_a, rows_b: lists of prediction-row dicts (each with `key_field` and
+    a boolean-ish "correct" field — "True"/"False" strings from a CSV are
+    accepted) for the two conditions being compared, covering the same set of
+    images.
+
+    Returns a dict: b (count correct in A, wrong in B), c (count wrong in A,
+    correct in B), n_discordant (b + c), and p_value (two-sided exact
+    binomial test of b against Binomial(b + c, 0.5) — the standard McNemar
+    exact test for small/moderate discordant counts).
+    """
+
+    def _is_correct(value):
+        if isinstance(value, bool):
+            return value
+        return str(value).strip().lower() == "true"
+
+    correct_a = {row[key_field]: _is_correct(row["correct"]) for row in rows_a}
+    correct_b = {row[key_field]: _is_correct(row["correct"]) for row in rows_b}
+    shared_keys = set(correct_a) & set(correct_b)
+
+    b = sum(1 for k in shared_keys if correct_a[k] and not correct_b[k])
+    c = sum(1 for k in shared_keys if not correct_a[k] and correct_b[k])
+    n_discordant = b + c
+
+    if n_discordant == 0:
+        p_value = 1.0
+    else:
+        p_value = binomtest(min(b, c), n_discordant, 0.5, alternative="two-sided").pvalue
+
+    return {"b": b, "c": c, "n_discordant": n_discordant, "p_value": p_value}

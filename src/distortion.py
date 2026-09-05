@@ -90,10 +90,24 @@ def load_image_rgb(path):
     module in this project (distortion, rectification, and eventually CLIP
     inference, which expects RGB via PIL) working in one consistent channel
     order, rather than tracking BGR-vs-RGB per function.
+
+    Deliberately reads via np.fromfile + cv2.imdecode rather than
+    cv2.imread(path) directly: cv2.imread opens the path through a narrow
+    (non-Unicode) file API on Windows, so it silently fails (returns None) on
+    paths containing non-ASCII characters. Several MonuMAI filenames contain
+    Spanish accented characters (e.g. "iglesia_nuestra_señora_...jpg"), which
+    PIL (used for the "clean" condition elsewhere in this project) reads
+    without issue — confirming these are valid image files, not corrupt data,
+    and that cv2.imread's failure was a Windows-path-encoding bug in this
+    code, not a dataset problem. Discovered during the Day 5 full grid run;
+    see experiments/logs/day5.md.
     """
-    image = cv2.imread(str(path))
+    data = np.fromfile(str(path), dtype=np.uint8)
+    if data.size == 0:
+        raise FileNotFoundError(f"Could not read image (empty or missing file): {path}")
+    image = cv2.imdecode(data, cv2.IMREAD_COLOR)
     if image is None:
-        raise FileNotFoundError(f"Could not read image: {path}")
+        raise FileNotFoundError(f"Could not decode image: {path}")
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 

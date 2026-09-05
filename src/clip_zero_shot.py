@@ -22,6 +22,7 @@ import argparse
 import csv
 from pathlib import Path
 
+import numpy as np
 import open_clip
 import torch
 import yaml
@@ -154,6 +155,50 @@ def encode_image_features(image_paths, model, preprocess, device="cpu", batch_si
 
     print()
     return torch.cat(features, dim=0), ok_paths, failed_paths
+
+
+def encode_image_arrays(image_arrays, model, preprocess, device="cpu", batch_size=32):
+    """Encode a list of in-memory RGB numpy arrays (not file paths), batched.
+
+    Day 5 scope: distorted and rectified images are generated on the fly by
+    src/distortion.py and src/rectification.py and never written to disk, so
+    they can't be fed through encode_image_features (which reads paths). This
+    is the same batched-encode pattern as that function (and Day 2's
+    approach generally) — encode once, reused wherever the same array would
+    otherwise be re-encoded — applied to in-memory arrays instead.
+    """
+    features = []
+    for start in range(0, len(image_arrays), batch_size):
+        batch_arrays = image_arrays[start : start + batch_size]
+        tensors = [
+            preprocess(Image.fromarray(arr.astype(np.uint8), mode="RGB"))
+            for arr in batch_arrays
+        ]
+        batch = torch.stack(tensors).to(device)
+        with torch.no_grad():
+            batch_features = model.encode_image(batch)
+            batch_features = batch_features / batch_features.norm(dim=-1, keepdim=True)
+        features.append(batch_features)
+    return torch.cat(features, dim=0)
+
+
+def predict_from_features(image_features, text_features, class_names):
+    """Return (predicted_label, top1_confidence) per image.
+
+    Unlike classify_from_features (Day 2, which logs all 4 per-class
+    softmax scores), Day 5's row schema only needs the single top1
+    confidence value, per the plan's exact schema.
+    """
+    with torch.no_grad():
+        logits = 100.0 * image_features @ text_features.T
+        probs = logits.softmax(dim=-1)
+
+    results = []
+    for i in range(probs.shape[0]):
+        class_probs = probs[i].tolist()
+        best_idx = max(range(len(class_names)), key=lambda j: class_probs[j])
+        results.append((class_names[best_idx], class_probs[best_idx]))
+    return results
 
 
 def classify_from_features(
