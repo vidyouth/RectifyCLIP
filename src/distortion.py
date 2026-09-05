@@ -200,6 +200,7 @@ def build_distortion_gallery(
 
 
 def main():
+    """CLI entry point: --gallery builds the Day 3 qualitative distortion gallery."""
     parser = argparse.ArgumentParser(description="Synthetic perspective distortion.")
     parser.add_argument(
         "--gallery", action="store_true", help="Build the Day 3 qualitative gallery."

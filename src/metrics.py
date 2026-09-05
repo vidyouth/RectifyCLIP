@@ -81,6 +81,7 @@ def paired_mcnemar(rows_a, rows_b, key_field="image_id"):
     """
 
     def _is_correct(value):
+        """Normalize a row's "correct" field (bool, or "True"/"False" from a CSV) to bool."""
         if isinstance(value, bool):
             return value
         return str(value).strip().lower() == "true"

@@ -47,6 +47,7 @@ DAY5_CSV = "results/raw/day5_full_grid.csv"
 
 
 def load_day5_rows():
+    """Load results/raw/day5_full_grid.csv, coercing the "correct" column from string to bool."""
     with open(DAY5_CSV, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     for row in rows:
@@ -94,6 +95,7 @@ def compute_recovery(rows):
 
 
 def save_recovery_table(recovery, output_path):
+    """Write results/tables/day6_recovery.md, including the mild-severity caution note."""
     lines = ["# Day 6 — recovery percentage per severity", ""]
     lines.append(
         "recovery = (acc_rectified - acc_distorted) / (acc_clean - acc_distorted) x 100, "
@@ -140,6 +142,7 @@ def save_recovery_table(recovery, output_path):
 
 
 def save_severity_curve(recovery, output_path):
+    """Plot clean/distorted/rectified accuracy vs. severity (x=0/mild/medium/severe)."""
     import matplotlib.pyplot as plt
 
     x_labels = ["clean (0)", "mild", "medium", "severe"]
@@ -172,6 +175,7 @@ def save_severity_curve(recovery, output_path):
 
 
 def save_per_class_table(rows, class_names, output_path):
+    """Write results/tables/day6_per_class.md: per-class accuracy by condition, pooled and per-severity."""
     lines = ["# Day 6 — per-class breakdown: does rectification help all 4 styles equally?", ""]
 
     lines.append("## Per-class accuracy by condition, pooled across all 3 severities")
@@ -254,6 +258,7 @@ def find_hurt_and_helped_candidates(rows):
 
 
 def class_breakdown(records, class_names):
+    """Count how many of a list of hurt/helped records belong to each class."""
     counts = defaultdict(int)
     for record in records:
         counts[record["true_label"]] += 1
@@ -365,6 +370,7 @@ def run_confidence_and_prompt_sweep(config, device="cpu", image_limit=None, batc
     rows = []
 
     def classify_and_emit(features, true_labels_local, image_ids_local, severity, condition, prompts_to_use):
+        """Classify a batch of cached image features against each of prompts_to_use, appending rows."""
         for prompt in prompts_to_use:
             text_features = text_features_by_prompt[prompt]
             with __import__("torch").no_grad():
@@ -424,6 +430,7 @@ def run_confidence_and_prompt_sweep(config, device="cpu", image_limit=None, batc
 
 
 def save_scores_csv(rows, output_path):
+    """Write the confidence/prompt-sensitivity rerun's rows to results/raw/day6_scores.csv."""
     fieldnames = [
         "image_id", "true_label", "severity", "condition", "prompt_id",
         "predicted_label", "correct", "top1_confidence", "true_class_confidence",
@@ -436,6 +443,7 @@ def save_scores_csv(rows, output_path):
 
 
 def save_confidence_table_and_plot(scores_rows, default_prompt_id, table_path, plot_path):
+    """Write the mean-confidence-on-true-class table and its severity-curve-style plot."""
     import matplotlib.pyplot as plt
 
     default_rows = [r for r in scores_rows if r["prompt_id"] == default_prompt_id]
@@ -482,6 +490,8 @@ def save_confidence_table_and_plot(scores_rows, default_prompt_id, table_path, p
 
 
 def save_prompt_sensitivity_table(scores_rows, output_path):
+    """Write the medium-severity, 3-prompt accuracy table, flagging whether the
+    clean >= rectified >= distorted direction holds for each prompt."""
     medium_rows = [r for r in scores_rows if r["severity"] == "medium"]
     prompt_ids = sorted(set(r["prompt_id"] for r in medium_rows))
 

@@ -352,6 +352,7 @@ def write_baseline_summary(pilot_rows_by_template, class_names, default_template
 
 
 def main():
+    """CLI entry point: --image for the Day 1 single-image check, or --batch for Day 2."""
     parser = argparse.ArgumentParser(
         description="Zero-shot classify facade image(s) with frozen CLIP."
     )

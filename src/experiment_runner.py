@@ -218,6 +218,7 @@ def run_grid(config, device="cpu", image_limit=None, batch_size=32, verbose=True
 
 
 def save_rows_csv(rows, output_path):
+    """Write the grid's row dicts to CSV using ROW_FIELDNAMES, creating parent dirs as needed."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", newline="", encoding="utf-8") as f:
@@ -227,6 +228,7 @@ def save_rows_csv(rows, output_path):
 
 
 def save_run_config(config, output_path, extra=None):
+    """Save the exact config + provenance (seed, prompt, git hash, timestamp) for this run as JSON."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -260,6 +262,8 @@ def compute_headline_table(rows):
 
 
 def save_headline_table(headline, output_path):
+    """Write the clean/distorted/rectified accuracy-by-severity Markdown table, with the
+    clean >= rectified >= distorted sanity check spelled out per row."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     lines = ["# Day 5 headline results — accuracy by severity and condition", ""]
@@ -277,6 +281,7 @@ def save_headline_table(headline, output_path):
 
 
 def main():
+    """CLI entry point: run the full (or --n-images-limited, for a smoke test) Day 5 grid."""
     parser = argparse.ArgumentParser(description="Day 5 full experimental grid.")
     parser.add_argument("--config", default="configs/default.yaml")
     parser.add_argument(
