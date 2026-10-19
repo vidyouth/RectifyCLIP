@@ -1,0 +1,30 @@
+{
+  "day": "13_v7",
+  "git_commit": "a487d12a685fcc022118ad819f7da6db2a5ce1f9",
+  "timestamp": "2026-10-18T06:34:31Z",
+  "angles": [
+    5,
+    15,
+    35
+  ],
+  "max_angle_from_vertical_deg": 25.0,
+  "min_length_fraction_of_diagonal": 0.03,
+  "ransac_iterations": 500,
+  "ransac_inlier_px": 3.0,
+  "min_inlier_lines": 4,
+  "pitch_dominant_axis_tolerance_deg": 20.0,
+  "models_used": [
+    {
+      "name": "ViT-B-32",
+      "pretrained": "laion2b_s34b_b79k",
+      "slug": "clip_vit_b32",
+      "label": "CLIP ViT-B/32"
+    },
+    {
+      "name": "ViT-L-14",
+      "pretrained": "laion2b_s32b_b82k",
+      "slug": "clip_vit_l14",
+      "label": "CLIP ViT-L/14"
+    }
+  ]
+}

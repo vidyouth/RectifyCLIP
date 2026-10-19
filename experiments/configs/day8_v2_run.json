@@ -1,0 +1,27 @@
+{
+  "base_seed": 42,
+  "n_replicates": 5,
+  "prompt_template": "a photo of {} architecture",
+  "class_names": [
+    "Hispanic-Muslim",
+    "Gothic",
+    "Renaissance",
+    "Baroque"
+  ],
+  "dataset_root": "data/monumai",
+  "model_name": "ViT-B-32",
+  "pretrained_weights": "laion2b_s34b_b79k",
+  "severity_fractions": {
+    "mild": 0.05,
+    "medium": 0.1,
+    "severe": 0.2
+  },
+  "border_policy": "mean_fill",
+  "seed_derivation": "sha256(f'{base_seed}:{image_id}:{replicate_index}')[:4 bytes]",
+  "git_commit_hash": "a487d12a685fcc022118ad819f7da6db2a5ce1f9",
+  "run_timestamp_utc": "2026-10-10T06:43:54Z",
+  "n_images_requested": null,
+  "n_rows_written": 49962,
+  "n_images_failed": 0,
+  "total_wall_clock_seconds": 88165.80218482018
+}

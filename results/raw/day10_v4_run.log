@@ -1,0 +1,45 @@
+[2026-10-12 23:05:43] Loaded 1514 images from data/monumai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-10-12 23:05:45] Model + text features ready
+[2026-10-12 23:07:34] clean: 1514 images encoded
+[2026-10-12 23:07:35] Checkpoint: clean block done
+[2026-10-12 23:15:10] theta=5 replicate=0: 1514 images
+[2026-10-12 23:15:11] Checkpoint: theta=5 replicate=0 done in 456.0s
+[2026-10-12 23:20:56] theta=5 replicate=1: 1514 images
+[2026-10-12 23:20:57] Checkpoint: theta=5 replicate=1 done in 346.1s
+[2026-10-12 23:26:44] theta=5 replicate=2: 1514 images
+[2026-10-12 23:26:45] Checkpoint: theta=5 replicate=2 done in 348.0s
+[2026-10-12 23:32:22] theta=10 replicate=0: 1514 images
+[2026-10-12 23:32:23] Checkpoint: theta=10 replicate=0 done in 338.4s
+[2026-10-12 23:38:05] theta=10 replicate=1: 1514 images
+[2026-10-12 23:38:06] Checkpoint: theta=10 replicate=1 done in 342.8s
+[2026-10-12 23:43:48] theta=10 replicate=2: 1514 images
+[2026-10-12 23:43:49] Checkpoint: theta=10 replicate=2 done in 342.6s
+[2026-10-12 23:49:28] theta=15 replicate=0: 1514 images
+[2026-10-12 23:49:29] Checkpoint: theta=15 replicate=0 done in 340.1s
+[2026-10-12 23:55:04] theta=15 replicate=1: 1514 images
+[2026-10-12 23:55:05] Checkpoint: theta=15 replicate=1 done in 336.2s
+[2026-10-13 00:00:24] theta=15 replicate=2: 1514 images
+[2026-10-13 00:00:25] Checkpoint: theta=15 replicate=2 done in 320.2s
+[2026-10-13 00:05:48] theta=25 replicate=0: 1514 images
+[2026-10-13 00:05:49] Checkpoint: theta=25 replicate=0 done in 323.6s
+[2026-10-13 00:11:00] theta=25 replicate=1: 1514 images
+[2026-10-13 00:11:01] Checkpoint: theta=25 replicate=1 done in 311.9s
+[2026-10-13 00:16:22] theta=25 replicate=2: 1514 images
+[2026-10-13 00:16:23] Checkpoint: theta=25 replicate=2 done in 322.1s
+C:\Users\vidyu\Documents\RectifyCLIP\src\rectification.py:145: RuntimeWarning: Mean of empty slice.
+  mean_color = rectified_image[mask].mean(axis=0)
+C:\Users\vidyu\Documents\RectifyCLIP\.venv\Lib\site-packages\numpy\_core\_methods.py:139: RuntimeWarning: invalid value encountered in divide
+  ret = um.true_divide(
+C:\Users\vidyu\Documents\RectifyCLIP\src\rectification.py:146: RuntimeWarning: invalid value encountered in cast
+  output[~mask] = mean_color
+[2026-10-13 00:21:34] theta=35 replicate=0: 1514 images
+[2026-10-13 00:21:35] Checkpoint: theta=35 replicate=0 done in 312.3s
+[2026-10-13 00:26:42] theta=35 replicate=1: 1514 images
+[2026-10-13 00:26:43] Checkpoint: theta=35 replicate=1 done in 308.0s
+[2026-10-13 00:31:48] theta=35 replicate=2: 1514 images
+[2026-10-13 00:31:49] Checkpoint: theta=35 replicate=2 done in 305.7s
+[2026-10-13 00:31:49] ALL BLOCKS COMPLETE
+[2026-10-13 00:31:49] Saved experiments/configs/day10_v4_run.json
+[2026-10-13 00:31:49] Total wall-clock time: 5165.6s

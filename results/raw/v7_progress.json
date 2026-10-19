@@ -1,0 +1,18 @@
+{
+  "validation_angles_done": [
+    5,
+    15,
+    35
+  ],
+  "validation_gate": {
+    "n_total": 4542,
+    "coverage": 0.9403346543372963,
+    "pitch_dominant_n": 902,
+    "pitch_dominant_corr": 0.34640444318962993,
+    "pitch_dominant_mae": 30.016463887691653,
+    "overall_unsigned_corr": 0.1376637619753659,
+    "overall_unsigned_mae": 26.77905470412964,
+    "passed_gate": false
+  },
+  "stopped_after_validation": true
+}

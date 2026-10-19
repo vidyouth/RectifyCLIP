@@ -1,0 +1,30 @@
+{
+  "base_seed": 42,
+  "theta_levels_deg": [
+    5,
+    10,
+    15,
+    25,
+    35
+  ],
+  "n_replicates": 3,
+  "seed_namespace": "v4_camera_rotation",
+  "intrinsics_assumption": {
+    "focal_length": "1.0 * image_width",
+    "principal_point": "(image_width/2, image_height/2)"
+  },
+  "class_names": [
+    "Hispanic-Muslim",
+    "Gothic",
+    "Renaissance",
+    "Baroque"
+  ],
+  "dataset_root": "data/monumai",
+  "model_name": "ViT-B-32",
+  "pretrained_weights": "laion2b_s34b_b79k",
+  "border_policy": "mean_fill",
+  "git_commit_hash": "a487d12a685fcc022118ad819f7da6db2a5ce1f9",
+  "run_timestamp_utc": "2026-10-12T19:01:49Z",
+  "n_images_requested": null,
+  "total_wall_clock_seconds": 5165.6148064136505
+}

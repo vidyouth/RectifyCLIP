@@ -16,7 +16,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from distortion import SEVERITY_FRACTIONS, distort  # noqa: E402
+from distortion import SEVERITY_FRACTIONS, derive_seed, distort  # noqa: E402
 
 
 def _sample_image():
@@ -95,10 +95,27 @@ def test_unknown_severity_raises():
         raise AssertionError("expected ValueError for an unknown severity")
 
 
+def test_derive_seed_is_stable_and_varies():
+    """derive_seed must be deterministic across calls/processes, and must
+    differ across images and across replicates of the same image (the Day 8
+    v2 fix for the shared-seed bug depends on both properties)."""
+    a1 = derive_seed("Gothic__img1", 0, base_seed=42)
+    a2 = derive_seed("Gothic__img1", 0, base_seed=42)
+    assert a1 == a2, "derive_seed must be deterministic for the same inputs"
+
+    b = derive_seed("Gothic__img1", 1, base_seed=42)
+    c = derive_seed("Baroque__img2", 0, base_seed=42)
+    assert a1 != b, "different replicates of the same image must get different seeds"
+    assert a1 != c, "different images must get different seeds"
+    assert 0 <= a1 < 2**32
+    print("test_derive_seed_is_stable_and_varies: PASSED")
+
+
 if __name__ == "__main__":
     test_byte_identical_across_repeated_calls()
     test_different_seeds_differ()
     test_output_shape_matches_input()
     test_homography_is_3x3()
     test_unknown_severity_raises()
+    test_derive_seed_is_stable_and_varies()
     print("\nALL TESTS PASSED")

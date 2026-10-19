@@ -1,0 +1,45 @@
+{
+  "day": "12_v6",
+  "git_commit": "a487d12a685fcc022118ad819f7da6db2a5ce1f9",
+  "timestamp": "2026-10-17T16:04:04Z",
+  "seed": 42,
+  "n_images": 1514,
+  "angles": [
+    5,
+    15,
+    35
+  ],
+  "replicate": 0,
+  "models": [
+    {
+      "name": "ViT-B-32",
+      "pretrained": "laion2b_s34b_b79k",
+      "slug": "clip_vit_b32",
+      "label": "CLIP ViT-B/32"
+    },
+    {
+      "name": "ViT-L-14",
+      "pretrained": "laion2b_s32b_b82k",
+      "slug": "clip_vit_l14",
+      "label": "CLIP ViT-L/14"
+    },
+    {
+      "name": "ViT-B-16-SigLIP",
+      "pretrained": "webli",
+      "slug": "siglip_vit_b16",
+      "label": "SigLIP ViT-B/16"
+    }
+  ],
+  "prompt_ensemble_templates": [
+    "a photo of {} architecture",
+    "a photo of a {} building",
+    "an image of {} style architecture",
+    "a photograph of a building in the {} architectural style",
+    "{} architecture",
+    "a building in the {} style",
+    "a facade in {} architectural style",
+    "this building is an example of {} architecture"
+  ],
+  "border_policy": "mean_fill",
+  "note": "homography/seeds reused unmodified from src/experiment_v4.py for continuity with the v4 CSV"
+}

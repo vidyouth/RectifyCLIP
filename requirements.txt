@@ -15,3 +15,9 @@ scikit-learn==1.5.2
 scipy==1.18.1
 pyyaml==6.0.2
 Pillow==10.4.0
+
+# Day 11 v5 only: open_clip's SigLIP support needs transformers for the text
+# tower. Added when evaluating ViT-B-16-SigLIP (webli) in src/experiment_v5_models.py.
+# Pinned below 5.0: transformers 5.x removed Tokenizer.batch_encode_plus, which
+# open_clip_torch 2.29.0's SigLIP tokenizer wrapper still calls.
+transformers==4.46.3

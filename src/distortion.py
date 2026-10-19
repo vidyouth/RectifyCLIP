@@ -19,6 +19,7 @@ of it.
 """
 
 import argparse
+import hashlib
 import random
 from pathlib import Path
 
@@ -81,6 +82,47 @@ def distort(image, severity, seed):
     H = cv2.getPerspectiveTransform(src_corners, dst_corners)
     distorted = cv2.warpPerspective(image, H, (w, h))
     return distorted, H
+
+
+def derive_seed(image_id, replicate_index, base_seed):
+    """Derive a per-(image_id, replicate_index) seed from a stable hash.
+
+    Day 5's grid passed the single config-level `base_seed` straight into
+    every call to `distort()`, so every image at a given severity got the
+    exact same `np.random.RandomState(seed)` draw — one shared random tilt
+    cloned across the whole dataset, not an independent tilt per image (see
+    experiments/logs/day8_v2.md). This function fixes that: each
+    (image_id, replicate_index) pair gets its own seed, so each image/
+    replicate gets its own independent draw, while staying fully
+    reproducible (same inputs -> same seed -> same output, every run, any
+    machine).
+
+    Uses hashlib.sha256 rather than Python's built-in hash() because hash()
+    is randomly salted per-process for strings (PYTHONHASHSEED) unless
+    explicitly disabled — it would not reproduce across runs/machines.
+    Returns an int in [0, 2**32 - 1], the valid range for
+    np.random.RandomState.
+    """
+    key = f"{base_seed}:{image_id}:{replicate_index}".encode("utf-8")
+    digest = hashlib.sha256(key).digest()
+    return int.from_bytes(digest[:4], byteorder="big")
+
+
+def homography_tilt_angle(H):
+    """Return (angle_deg, magnitude) summarizing a homography's tilt direction.
+
+    H[2,0] and H[2,1] are the two "perspective" entries of a 3x3 homography
+    — together they encode the direction and strength of the vanishing-point
+    tilt that makes the warp projective rather than affine (both are exactly
+    0 for a pure affine transform). angle_deg = atan2(H[2,1], H[2,0]) in
+    degrees (0-360) gives the tilt's direction in that 2D plane; magnitude is
+    its Euclidean norm. Used by the Day 8 v2 direction-check to verify tilts
+    now point in roughly uniform random directions rather than all sharing
+    one sign (see experiments/logs/day8_v2.md).
+    """
+    angle_deg = np.degrees(np.arctan2(H[2, 1], H[2, 0])) % 360
+    magnitude = float(np.hypot(H[2, 0], H[2, 1]))
+    return float(angle_deg), magnitude
 
 
 def load_image_rgb(path):

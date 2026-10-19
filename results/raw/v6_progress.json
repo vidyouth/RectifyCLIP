@@ -1,0 +1,28 @@
+{
+  "models": {
+    "clip_vit_b32": {
+      "clean_done": true,
+      "completed_angles": [
+        5,
+        15,
+        35
+      ]
+    },
+    "clip_vit_l14": {
+      "clean_done": true,
+      "completed_angles": [
+        5,
+        15,
+        35
+      ]
+    },
+    "siglip_vit_b16": {
+      "clean_done": true,
+      "completed_angles": [
+        5,
+        15,
+        35
+      ]
+    }
+  }
+}
